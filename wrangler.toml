@@ -1,0 +1,7 @@
+name = "vocabulary-worker"
+main = "src/worker.js"
+compatibility_date = "2024-01-01"
+
+[[kv_namespaces]]
+binding = "VOCABULARY_DB"
+id = "d56d0e8ea3754288ad3166c271af3824"

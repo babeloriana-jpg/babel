@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vertex Vocab</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0e0f;
+    --surface: #161618;
+    --surface2: #1e1e21;
+    --border: #2a2a2e;
+    --text: #e8e4dc;
+    --text-muted: #6b6870;
+    --text-dim: #3d3b42;
+    --accent: #c9a96e;
+    --accent-soft: #c9a96e22;
+    --green: #6dbd8a;
+    --red: #c96e6e;
+    --blue: #6e9bc9;
+    --purple: #9b6ec9;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Mono', monospace;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 13px;
+    letter-spacing: 0.01em;
+  }
+
+  /* Layout */
+  .app { display: flex; min-height: 100vh; }
+
+  .sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    padding: 32px 0;
+    position: fixed;
+    height: 100vh;
+    top: 0; left: 0;
+    z-index: 10;
+  }
+
+  .logo {
+    padding: 0 24px 32px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 24px;
+  }
+
+  .logo-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 300;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+  }
+
+  .logo-sub {
+    color: var(--text-muted);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  nav { flex: 1; padding: 0 12px; }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: all 0.15s;
+    margin-bottom: 2px;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+  }
+
+  .nav-item:hover { background: var(--surface2); color: var(--text); }
+  .nav-item.active { background: var(--accent-soft); color: var(--accent); }
+  .nav-item .icon { font-size: 14px; width: 18px; text-align: center; }
+
+  .nav-section {
+    padding: 8px 12px 4px;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-top: 12px;
+  }
+
+  /* Stats badges in sidebar */
+  .badge {
+    margin-left: auto;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 20px;
+    min-width: 20px;
+    text-align: center;
+  }
+
+  .badge.urgent { background: #c96e6e22; color: var(--red); }
+
+  /* Main content */
+  .main {
+    margin-left: 220px;
+    flex: 1;
+    padding: 48px;
+    max-width: 900px;
+  }
+
+  /* Page header */
+  .page-header {
+    margin-bottom: 40px;
+  }
+
+  .page-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 38px;
+    font-weight: 300;
+    color: var(--text);
+    letter-spacing: 0.02em;
+    line-height: 1;
+  }
+
+  .page-title em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .page-subtitle {
+    color: var(--text-muted);
+    margin-top: 8px;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+
+  /* Stats grid */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .stat-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 42px;
+    font-weight: 300;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .stat-label {
+    color: var(--text-muted);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  .stat-card.urgent .stat-number { color: var(--red); }
+  .stat-card.good .stat-number { color: var(--green); }
+
+  /* Category pills */
+  .category-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+
+  .pill {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    background: none;
+    font-family: 'DM Mono', monospace;
+    transition: all 0.15s;
+  }
+
+  .pill:hover { border-color: var(--accent); color: var(--accent); }
+  .pill.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+
+  /* Word list */
+  .word-list { display: flex; flex-direction: column; gap: 8px; }
+
+  .word-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr auto auto;
+    align-items: center;
+    gap: 16px;
+    transition: border-color 0.15s;
+  }
+
+  .word-item:hover { border-color: var(--border); }
+  .word-item.difficult { border-left: 2px solid var(--red); }
+  .word-item.new { border-left: 2px solid var(--blue); }
+
+  .word-term {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--text);
+  }
+
+  .word-translation { color: var(--text-muted); font-size: 12px; }
+
+  .word-context {
+    font-size: 11px;
+    color: var(--text-dim);
+    font-style: italic;
+    margin-top: 4px;
+    grid-column: 1 / -1;
+    display: none;
+  }
+
+  .word-item:hover .word-context { display: block; }
+
+  .word-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+
+  .word-category {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: var(--surface2);
+    color: var(--text-muted);
+  }
+
+  .word-due {
+    font-size: 10px;
+    color: var(--text-dim);
+  }
+
+  .word-due.today { color: var(--accent); }
+  .word-due.overdue { color: var(--red); }
+
+  .btn-delete {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: all 0.15s;
+  }
+
+  .btn-delete:hover { background: #c96e6e22; color: var(--red); }
+
+  /* Add word form */
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group.full { grid-column: 1 / -1; }
+
+  label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  input, select, textarea {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--accent);
+  }
+
+  select option { background: var(--surface2); }
+  textarea { resize: vertical; min-height: 70px; }
+
+  .btn {
+    padding: 10px 20px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    transition: all 0.15s;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .btn-ghost {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Study / Flashcard view */
+  .study-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    padding: 24px 0;
+  }
+
+  .study-progress {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .progress-bar {
+    width: 200px;
+    height: 2px;
+    background: var(--surface2);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    transition: width 0.3s ease;
+  }
+
+  .flashcard {
+    width: 100%;
+    max-width: 560px;
+    min-height: 280px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    text-align: center;
+  }
+
+  .flashcard:hover { border-color: var(--accent); }
+
+  .flashcard-category {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .flashcard-hint {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+  }
+
+  .flashcard-term {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px;
+    font-weight: 300;
+    color: var(--text);
+    line-height: 1.1;
+    transition: all 0.2s;
+  }
+
+  .flashcard-translation {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--accent);
+    margin-top: 16px;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: all 0.3s ease;
+  }
+
+  .flashcard.revealed .flashcard-translation {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .flashcard-context {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-top: 12px;
+    max-width: 400px;
+    line-height: 1.6;
+    opacity: 0;
+    transition: opacity 0.3s ease 0.1s;
+  }
+
+  .flashcard.revealed .flashcard-context { opacity: 1; }
+
+  .rating-row {
+    display: flex;
+    gap: 10px;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: all 0.3s ease;
+    pointer-events: none;
+  }
+
+  .rating-row.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+  }
+
+  .rating-btn {
+    padding: 12px 20px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    transition: all 0.15s;
+    background: var(--surface);
+    color: var(--text-muted);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .rating-btn .emoji { font-size: 18px; }
+  .rating-btn:hover { transform: translateY(-2px); }
+  .rating-btn.hard:hover { border-color: var(--red); color: var(--red); background: #c96e6e11; }
+  .rating-btn.ok:hover { border-color: var(--blue); color: var(--blue); background: #6e9bc911; }
+  .rating-btn.easy:hover { border-color: var(--green); color: var(--green); background: #6dbd8a11; }
+
+  .study-done {
+    text-align: center;
+    padding: 48px;
+  }
+
+  .study-done-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px;
+    font-weight: 300;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  /* Empty states */
+  .empty {
+    text-align: center;
+    padding: 64px 24px;
+    color: var(--text-muted);
+  }
+
+  .empty-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    margin-bottom: 8px;
+    color: var(--text-dim);
+  }
+
+  /* Loading */
+  .loading { color: var(--text-dim); font-size: 12px; padding: 48px; text-align: center; }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    background: var(--surface2);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: all 0.2s;
+    z-index: 100;
+  }
+
+  .toast.show { opacity: 1; transform: translateY(0); }
+
+  /* Hidden */
+  .hidden { display: none !important; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-title">Vertex</div>
+      <div class="logo-sub">słownik</div>
+    </div>
+    <nav>
+      <button class="nav-item active" onclick="showPage('dashboard')" id="nav-dashboard">
+        <span class="icon">◈</span> Przegląd
+      </button>
+      <button class="nav-item" onclick="showPage('study')" id="nav-study">
+        <span class="icon">◎</span> Ucz się
+        <span class="badge urgent" id="badge-due">0</span>
+      </button>
+
+      <div class="nav-section">Kolekcje</div>
+      <button class="nav-item" onclick="showPage('words'); setCategory('all')" id="nav-words">
+        <span class="icon">≡</span> Wszystkie
+        <span class="badge" id="badge-total">0</span>
+      </button>
+      <button class="nav-item" onclick="showPage('words'); setCategory('Angielski')">
+        <span class="icon">◦</span> Angielski
+      </button>
+      <button class="nav-item" onclick="showPage('words'); setCategory('Lean')">
+        <span class="icon">◦</span> Lean
+      </button>
+      <button class="nav-item" onclick="showPage('words'); setCategory('Zarządzanie')">
+        <span class="icon">◦</span> Zarządzanie
+      </button>
+      <button class="nav-item" onclick="showPage('words'); setCategory('Focusing')">
+        <span class="icon">◦</span> Focusing
+      </button>
+
+      <div class="nav-section">Akcje</div>
+      <button class="nav-item" onclick="showPage('add')" id="nav-add">
+        <span class="icon">+</span> Dodaj słówko
+      </button>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+
+    <!-- Dashboard -->
+    <div id="page-dashboard">
+      <div class="page-header">
+        <div class="page-title">Dzień dobry, <em>Oriana</em></div>
+        <div class="page-subtitle" id="dashboard-date"></div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card urgent">
+          <div class="stat-number" id="stat-due">—</div>
+          <div class="stat-label">do powtórki</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="stat-total">—</div>
+          <div class="stat-label">wszystkich</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="stat-difficult">—</div>
+          <div class="stat-label">trudnych</div>
+        </div>
+        <div class="stat-card good">
+          <div class="stat-number" id="stat-mastered">—</div>
+          <div class="stat-label">opanowanych</div>
+        </div>
+      </div>
+
+      <div class="card" id="dashboard-due-section">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+          <div style="font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:300; color:var(--text);">
+            Do powtórki dziś
+          </div>
+          <button class="btn btn-primary" onclick="showPage('study')">Zacznij sesję →</button>
+        </div>
+        <div id="dashboard-due-list" class="word-list"></div>
+      </div>
+    </div>
+
+    <!-- Study -->
+    <div id="page-study" class="hidden">
+      <div class="page-header">
+        <div class="page-title">Sesja <em>nauki</em></div>
+      </div>
+
+      <div class="category-row">
+        <button class="pill active" onclick="setStudyCategory('all', this)">Wszystkie</button>
+        <button class="pill" onclick="setStudyCategory('Angielski', this)">Angielski</button>
+        <button class="pill" onclick="setStudyCategory('Lean', this)">Lean</button>
+        <button class="pill" onclick="setStudyCategory('Zarządzanie', this)">Zarządzanie</button>
+        <button class="pill" onclick="setStudyCategory('Focusing', this)">Focusing</button>
+      </div>
+
+      <div class="study-container">
+        <div class="study-progress">
+          <span id="study-current">0</span>
+          <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+          <span id="study-total">0</span>
+        </div>
+
+        <div class="flashcard" id="flashcard" onclick="revealCard()">
+          <div class="flashcard-category" id="card-category"></div>
+          <div class="flashcard-term" id="card-term">Ładowanie...</div>
+          <div class="flashcard-translation" id="card-translation"></div>
+          <div class="flashcard-context" id="card-context"></div>
+          <div class="flashcard-hint">kliknij aby odkryć</div>
+        </div>
+
+        <div class="rating-row" id="rating-row">
+          <button class="rating-btn hard" onclick="rate(1)">
+            <span class="emoji">✗</span> nie pamiętam
+          </button>
+          <button class="rating-btn ok" onclick="rate(3)">
+            <span class="emoji">∼</span> prawie
+          </button>
+          <button class="rating-btn easy" onclick="rate(5)">
+            <span class="emoji">✓</span> wiem!
+          </button>
+        </div>
+
+        <div id="study-done-msg" class="study-done hidden">
+          <div class="study-done-title">Gotowe ✦</div>
+          <div style="color:var(--text-muted); font-size:13px; margin-bottom:24px;">
+            Sesja zakończona. Wróć jutro po więcej.
+          </div>
+          <button class="btn btn-ghost" onclick="showPage('dashboard')">← Wróć do przeglądu</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Words list -->
+    <div id="page-words" class="hidden">
+      <div class="page-header">
+        <div class="page-title">Kolekcja <em>słówek</em></div>
+      </div>
+
+      <div class="category-row" id="filter-pills">
+        <button class="pill active" onclick="setCategory('all', this)">Wszystkie</button>
+        <button class="pill" onclick="setCategory('Angielski', this)">Angielski</button>
+        <button class="pill" onclick="setCategory('Lean', this)">Lean</button>
+        <button class="pill" onclick="setCategory('Zarządzanie', this)">Zarządzanie</button>
+        <button class="pill" onclick="setCategory('Focusing', this)">Focusing</button>
+      </div>
+
+      <div id="words-list-container" class="word-list">
+        <div class="loading">Ładowanie...</div>
+      </div>
+    </div>
+
+    <!-- Add word -->
+    <div id="page-add" class="hidden">
+      <div class="page-header">
+        <div class="page-title">Dodaj <em>słówko</em></div>
+      </div>
+
+      <div class="card">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Słówko / termin</label>
+            <input type="text" id="input-term" placeholder="np. welcoming">
+          </div>
+          <div class="form-group">
+            <label>Tłumaczenie / znaczenie</label>
+            <input type="text" id="input-translation" placeholder="np. przyjmowanie, witanie">
+          </div>
+          <div class="form-group">
+            <label>Kategoria</label>
+            <select id="input-category">
+              <option value="Angielski">Angielski</option>
+              <option value="Lean">Lean</option>
+              <option value="Zarządzanie">Zarządzanie</option>
+              <option value="Focusing">Focusing</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <label>Zdanie z kontekstem (opcjonalne)</label>
+            <textarea id="input-context" placeholder="np. Welcoming all parts of yourself is the foundation of focusing..."></textarea>
+          </div>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button class="btn btn-primary" onclick="addWord()" id="btn-add">Dodaj słówko</button>
+          <button class="btn btn-ghost" onclick="clearForm()">Wyczyść</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // CONFIG — zmień na adres swojego Workera po wdrożeniu
+  const API = 'https://vocabulary-worker.babel-oriana.workers.dev';
+
+  let currentPage = 'dashboard';
+  let currentCategory = 'all';
+  let studyCategory = 'all';
+  let studyQueue = [];
+  let studyIndex = 0;
+  let studyTotal = 0;
+  let revealed = false;
+
+  // ─── Routing ──────────────────────────────────────────────
+  function showPage(page) {
+    document.querySelectorAll('[id^="page-"]').forEach(p => p.classList.add('hidden'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('page-' + page).classList.remove('hidden');
+    const navEl = document.getElementById('nav-' + page);
+    if (navEl) navEl.classList.add('active');
+    currentPage = page;
+    if (page === 'dashboard') loadDashboard();
+    if (page === 'words') loadWords(currentCategory);
+    if (page === 'study') loadStudy();
+  }
+
+  // ─── Dashboard ────────────────────────────────────────────
+  async function loadDashboard() {
+    const now = new Date();
+    document.getElementById('dashboard-date').textContent =
+      now.toLocaleDateString('pl-PL', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+    try {
+      const stats = await fetchJSON('/api/stats');
+      document.getElementById('stat-due').textContent = stats.due;
+      document.getElementById('stat-total').textContent = stats.total;
+      document.getElementById('stat-difficult').textContent = stats.difficult;
+      const mastered = stats.total - stats.due - stats.difficult;
+      document.getElementById('stat-mastered').textContent = Math.max(0, mastered);
+      document.getElementById('badge-due').textContent = stats.due;
+      document.getElementById('badge-total').textContent = stats.total;
+
+      const due = await fetchJSON('/api/due');
+      const list = document.getElementById('dashboard-due-list');
+      if (due.length === 0) {
+        list.innerHTML = '<div class="empty"><div class="empty-title">Wszystko opanowane ✦</div><div>Wróć jutro po więcej.</div></div>';
+      } else {
+        list.innerHTML = due.slice(0, 5).map(w => wordItemHTML(w)).join('');
+      }
+    } catch (e) {
+      document.getElementById('stat-due').textContent = '?';
+    }
+  }
+
+  // ─── Words List ───────────────────────────────────────────
+  async function loadWords(category = 'all') {
+    const container = document.getElementById('words-list-container');
+    container.innerHTML = '<div class="loading">Ładowanie...</div>';
+    try {
+      const words = await fetchJSON('/api/words' + (category !== 'all' ? '?category=' + category : ''));
+      if (words.length === 0) {
+        container.innerHTML = '<div class="empty"><div class="empty-title">Brak słówek</div><div>Dodaj pierwsze słówko →</div></div>';
+        return;
+      }
+      container.innerHTML = words.map(w => wordItemHTML(w, true)).join('');
+    } catch (e) {
+      container.innerHTML = '<div class="loading">Błąd połączenia z API</div>';
+    }
+  }
+
+  function setCategory(cat, el) {
+    currentCategory = cat;
+    if (el) {
+      document.querySelectorAll('#filter-pills .pill').forEach(p => p.classList.remove('active'));
+      el.classList.add('active');
+    }
+    if (currentPage === 'words') loadWords(cat);
+  }
+
+  function wordItemHTML(w, showDelete = false) {
+    const now = new Date();
+    const next = new Date(w.nextReview);
+    const isOverdue = next < now && w.repetitions > 0;
+    const isNew = w.repetitions === 0;
+    const isDifficult = w.easeFactor < 2.0 && w.repetitions > 0;
+
+    const dueText = isNew ? 'nowe' :
+      isOverdue ? 'zaległe' :
+      next.toLocaleDateString('pl-PL', { day: 'numeric', month: 'short' });
+
+    const dueClass = isNew ? '' : isOverdue ? 'overdue' : '';
+
+    return `
+      <div class="word-item ${isDifficult ? 'difficult' : isNew ? 'new' : ''}">
+        <div>
+          <div class="word-term">${w.term}</div>
+          ${w.context ? `<div class="word-context">${w.context}</div>` : ''}
+        </div>
+        <div class="word-translation">${w.translation}</div>
+        <div class="word-meta">
+          <span class="word-category">${w.category}</span>
+          <span class="word-due ${dueClass}">${dueText}</span>
+        </div>
+        ${showDelete ? `<button class="btn-delete" onclick="deleteWord('${w.id}')" title="Usuń">×</button>` : ''}
+      </div>
+    `;
+  }
+
+  // ─── Study ────────────────────────────────────────────────
+  async function loadStudy() {
+    studyQueue = await fetchJSON('/api/due' + (studyCategory !== 'all' ? '?category=' + studyCategory : ''));
+    studyIndex = 0;
+    studyTotal = studyQueue.length;
+    revealed = false;
+
+    document.getElementById('study-done-msg').classList.add('hidden');
+    document.getElementById('flashcard').classList.remove('hidden');
+    document.getElementById('rating-row').classList.remove('visible');
+
+    if (studyTotal === 0) {
+      document.getElementById('card-term').textContent = 'Nic do powtórki';
+      document.getElementById('card-translation').textContent = '';
+      document.getElementById('card-context').textContent = '';
+      document.getElementById('card-category').textContent = '';
+      updateProgress();
+      return;
+    }
+    showCard();
+  }
+
+  function setStudyCategory(cat, el) {
+    studyCategory = cat;
+    document.querySelectorAll('#page-study .pill').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    loadStudy();
+  }
+
+  function showCard() {
+    if (studyIndex >= studyQueue.length) {
+      endStudy();
+      return;
+    }
+    const w = studyQueue[studyIndex];
+    revealed = false;
+    document.getElementById('flashcard').classList.remove('revealed');
+    document.getElementById('rating-row').classList.remove('visible');
+    document.getElementById('card-category').textContent = w.category;
+    document.getElementById('card-term').textContent = w.term;
+    document.getElementById('card-translation').textContent = w.translation;
+    document.getElementById('card-context').textContent = w.context || '';
+    document.querySelector('.flashcard-hint').style.display = '';
+    updateProgress();
+  }
+
+  function revealCard() {
+    if (revealed) return;
+    revealed = true;
+    document.getElementById('flashcard').classList.add('revealed');
+    document.getElementById('rating-row').classList.add('visible');
+    document.querySelector('.flashcard-hint').style.display = 'none';
+  }
+
+  async function rate(quality) {
+    const w = studyQueue[studyIndex];
+    try {
+      await fetchJSON(`/api/words/${w.id}/review`, 'PUT', { quality });
+    } catch (e) {}
+    studyIndex++;
+    showCard();
+  }
+
+  function endStudy() {
+    document.getElementById('flashcard').classList.add('hidden');
+    document.getElementById('rating-row').classList.remove('visible');
+    document.getElementById('study-done-msg').classList.remove('hidden');
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const done = Math.min(studyIndex, studyTotal);
+    document.getElementById('study-current').textContent = done;
+    document.getElementById('study-total').textContent = studyTotal;
+    const pct = studyTotal > 0 ? (done / studyTotal * 100) : 0;
+    document.getElementById('progress-fill').style.width = pct + '%';
+  }
+
+  // ─── Add Word ─────────────────────────────────────────────
+  async function addWord() {
+    const term = document.getElementById('input-term').value.trim();
+    const translation = document.getElementById('input-translation').value.trim();
+    const category = document.getElementById('input-category').value;
+    const context = document.getElementById('input-context').value.trim();
+
+    if (!term || !translation) { toast('Wpisz słówko i tłumaczenie'); return; }
+
+    const btn = document.getElementById('btn-add');
+    btn.disabled = true;
+    btn.textContent = 'Zapisuję...';
+
+    try {
+      await fetchJSON('/api/words', 'POST', { term, translation, category, context });
+      toast('Dodano: ' + term);
+      clearForm();
+      loadStats();
+    } catch (e) {
+      toast('Błąd — sprawdź połączenie z API');
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'Dodaj słówko';
+  }
+
+  function clearForm() {
+    document.getElementById('input-term').value = '';
+    document.getElementById('input-translation').value = '';
+    document.getElementById('input-context').value = '';
+    document.getElementById('input-term').focus();
+  }
+
+  async function deleteWord(id) {
+    if (!confirm('Usunąć to słówko?')) return;
+    await fetchJSON('/api/words/' + id, 'DELETE');
+    loadWords(currentCategory);
+    loadStats();
+  }
+
+  // ─── Utils ────────────────────────────────────────────────
+  async function fetchJSON(path, method = 'GET', body = null) {
+    const opts = { method, headers: { 'Content-Type': 'application/json' } };
+    if (body) opts.body = JSON.stringify(body);
+    const res = await fetch(API + path, opts);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return res.json();
+  }
+
+  async function loadStats() {
+    try {
+      const stats = await fetchJSON('/api/stats');
+      document.getElementById('badge-due').textContent = stats.due;
+      document.getElementById('badge-total').textContent = stats.total;
+    } catch (e) {}
+  }
+
+  function toast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 2800);
+  }
+
+  // Init
+  loadDashboard();
+  loadStats();
+</script>
+</body>
+</html>
