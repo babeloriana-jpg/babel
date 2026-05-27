@@ -633,16 +633,17 @@
   }
 
   .overlay {
-    display: none;
+    display: block;
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.5);
     z-index: 99;
     opacity: 0;
+    pointer-events: none;
     transition: opacity 0.2s;
   }
 
-  .overlay.visible { opacity: 1; }
+  .overlay.visible { opacity: 1; pointer-events: all; }
 
   @media (max-width: 768px) {
     .hamburger { display: flex; }
