@@ -12,14 +12,30 @@
     --surface2: #1e1e21;
     --border: #2a2a2e;
     --text: #e8e4dc;
-    --text-muted: #6b6870;
-    --text-dim: #3d3b42;
+    --text-muted: #9e9aa6;
+    --text-dim: #6b6870;
     --accent: #c9a96e;
     --accent-soft: #c9a96e22;
     --green: #6dbd8a;
     --red: #c96e6e;
     --blue: #6e9bc9;
     --purple: #9b6ec9;
+  }
+
+  :root.light {
+    --bg: #f5f2ec;
+    --surface: #ffffff;
+    --surface2: #ede9e1;
+    --border: #d8d2c8;
+    --text: #1a1814;
+    --text-muted: #6b6457;
+    --text-dim: #a09890;
+    --accent: #a07840;
+    --accent-soft: #a0784018;
+    --green: #3a8a5a;
+    --red: #a04040;
+    --blue: #3a6a9a;
+    --purple: #6a3a9a;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -29,8 +45,9 @@
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
-    font-size: 13px;
+    font-size: 15px;
     letter-spacing: 0.01em;
+    transition: background 0.2s, color 0.2s;
   }
 
   /* Layout */
@@ -89,7 +106,7 @@
     width: 100%;
     text-align: left;
     font-family: 'DM Mono', monospace;
-    font-size: 12px;
+    font-size: 13px;
     letter-spacing: 0.05em;
   }
 
@@ -189,7 +206,7 @@
 
   .stat-label {
     color: var(--text-muted);
-    font-size: 10px;
+    font-size: 12px;
     letter-spacing: 0.15em;
     text-transform: uppercase;
     margin-top: 6px;
@@ -264,7 +281,7 @@
   .word-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
 
   .word-category {
-    font-size: 10px;
+    font-size: 12px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     padding: 3px 8px;
@@ -274,7 +291,7 @@
   }
 
   .word-due {
-    font-size: 10px;
+    font-size: 12px;
     color: var(--text-dim);
   }
 
@@ -306,7 +323,7 @@
   .form-group.full { grid-column: 1 / -1; }
 
   label {
-    font-size: 10px;
+    font-size: 12px;
     letter-spacing: 0.15em;
     text-transform: uppercase;
     color: var(--text-muted);
@@ -319,7 +336,7 @@
     padding: 10px 14px;
     color: var(--text);
     font-family: 'DM Mono', monospace;
-    font-size: 13px;
+    font-size: 15px;
     outline: none;
     transition: border-color 0.15s;
   }
@@ -337,7 +354,7 @@
     border: none;
     cursor: pointer;
     font-family: 'DM Mono', monospace;
-    font-size: 12px;
+    font-size: 13px;
     letter-spacing: 0.08em;
     transition: all 0.15s;
   }
@@ -423,7 +440,7 @@
     position: absolute;
     bottom: 20px;
     right: 20px;
-    font-size: 10px;
+    font-size: 12px;
     color: var(--text-dim);
     letter-spacing: 0.05em;
   }
@@ -558,6 +575,34 @@
   /* Hidden */
   .hidden { display: none !important; }
 
+
+  /* Theme toggle */
+  .theme-toggle {
+    padding: 10px 24px;
+    margin-top: auto;
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
+  }
+
+  .btn-theme {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    transition: all 0.15s;
+  }
+
+  .btn-theme:hover { border-color: var(--accent); color: var(--accent); }
+
   /* Scrollbar */
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: transparent; }
@@ -605,6 +650,11 @@
         <span class="icon">+</span> Dodaj słówko
       </button>
     </nav>
+  <div class="theme-toggle">
+      <button class="btn-theme" onclick="toggleTheme()" id="btn-theme">
+        <span id="theme-icon">☀</span> <span id="theme-label">Tryb jasny</span>
+      </button>
+    </div>
   </aside>
 
   <!-- Main -->
@@ -1006,6 +1056,25 @@
     el.textContent = msg;
     el.classList.add('show');
     setTimeout(() => el.classList.remove('show'), 2800);
+  }
+
+  // ─── Theme ───────────────────────────────────────────────
+  function toggleTheme() {
+    const isLight = document.documentElement.classList.toggle('light');
+    document.getElementById('theme-icon').textContent = isLight ? '☽' : '☀';
+    document.getElementById('theme-label').textContent = isLight ? 'Tryb ciemny' : 'Tryb jasny';
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  }
+
+  // Restore theme
+  if (localStorage.getItem('theme') === 'light') {
+    document.documentElement.classList.add('light');
+    document.addEventListener('DOMContentLoaded', () => {
+      const icon = document.getElementById('theme-icon');
+      const label = document.getElementById('theme-label');
+      if (icon) icon.textContent = '☽';
+      if (label) label.textContent = 'Tryb ciemny';
+    });
   }
 
   // Init
