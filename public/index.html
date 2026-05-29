@@ -711,6 +711,39 @@
     }
   }
 
+
+  .direction-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .direction-btn {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: none;
+    color: var(--text-muted);
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.05em;
+  }
+
+  .direction-btn.active {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+  }
+
+  .direction-btn:not(.active):hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
   /* Scrollbar */
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: transparent; }
@@ -825,6 +858,13 @@
         <button class="pill" onclick="setStudyCategory('Focusing', this)">Focusing</button>
       </div>
 
+      <div style="display:flex; justify-content:center; margin-bottom:16px;">
+        <div class="direction-toggle">
+          <button class="direction-btn active" id="btn-en-pl" onclick="setDirection('en-pl', this)">EN → PL</button>
+          <button class="direction-btn" id="btn-pl-en" onclick="setDirection('pl-en', this)">PL → EN</button>
+        </div>
+      </div>
+
       <div class="study-container">
         <div class="study-progress">
           <span id="study-current">0</span>
@@ -928,6 +968,7 @@
   const API = 'https://vocabulary-worker.babel-oriana.workers.dev';
 
   let currentPage = 'dashboard';
+  let studyDirection = 'en-pl'; // 'en-pl' or 'pl-en'
   let currentCategory = 'all';
   let studyCategory = 'all';
   let studyQueue = [];
@@ -1052,6 +1093,13 @@
     showCard();
   }
 
+  function setDirection(dir, el) {
+    studyDirection = dir;
+    document.querySelectorAll('.direction-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    loadStudy();
+  }
+
   function setStudyCategory(cat, el) {
     studyCategory = cat;
     document.querySelectorAll('#page-study .pill').forEach(p => p.classList.remove('active'));
@@ -1069,8 +1117,15 @@
     document.getElementById('flashcard').classList.remove('revealed');
     document.getElementById('rating-row').classList.remove('visible');
     document.getElementById('card-category').textContent = w.category;
-    document.getElementById('card-term').textContent = w.term;
-    document.getElementById('card-translation').textContent = w.translation;
+
+    if (studyDirection === 'pl-en') {
+      document.getElementById('card-term').textContent = w.translation;
+      document.getElementById('card-translation').textContent = w.term;
+    } else {
+      document.getElementById('card-term').textContent = w.term;
+      document.getElementById('card-translation').textContent = w.translation;
+    }
+
     document.getElementById('card-context').textContent = w.context || '';
     document.querySelector('.flashcard-hint').style.display = '';
     updateProgress();
