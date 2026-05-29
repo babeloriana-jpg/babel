@@ -106,8 +106,8 @@
     width: 100%;
     text-align: left;
     font-family: 'Inter', sans-serif;
-    font-size: 13px;
-    letter-spacing: 0.05em;
+    font-size: 14px;
+    letter-spacing: 0.03em;
   }
 
   .nav-item:hover { background: var(--surface2); color: var(--text); }
@@ -683,6 +683,31 @@
       flex-direction: column;
       align-items: flex-start;
       gap: 12px;
+    }
+  }
+
+
+  @media (max-width: 768px) {
+    .logo {
+      padding-left: 72px;
+    }
+  }
+
+
+  @media (max-width: 768px) {
+    .nav-item {
+      color: var(--text);
+      font-size: 16px;
+    }
+    .nav-section {
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+    .logo-title {
+      font-size: 24px;
+    }
+    .logo-sub {
+      font-size: 12px;
     }
   }
 
